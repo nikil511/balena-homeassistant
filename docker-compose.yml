@@ -55,7 +55,7 @@ services:
     volumes:
       - config:/config
       - zigbee2mqtt:/zigbee2mqtt
-      - esphome:/esphome
+    # - esphome:/esphome
     user: root
 
   # https://github.com/balenablocks/hostname
@@ -86,20 +86,20 @@ services:
     # If you adjust command line, make sure to pass the default CMD arguments too:
     #command: --storage-path /data --paa-root-cert-dir /data/credentials --bluetooth-adapter 0
 
-  # # https://hub.docker.com/r/mrlt8/wyze-bridge/tags
-  # wyze-bridge:
-  #   image: mrlt8/wyze-bridge:2.10.3@sha256:af2d638a6d6d52e15ddcfb711e5b905e484b1f519986ad33b9be562b6277b987
-  #   ports:
-  #     # - 1935:1935 # RTMP
-  #     # - 8554:8554 # RTSP
-  #     # - 8888:8888 # HLS
-  #     # - 8889:8889 # WebRTC
-  #     # - 8189:8189/udp # WebRTC/ICE
-  #     - 5001:5000 # WEB-UI
-  #   volumes:
-  #     - wyze-tokens:/tokens
+    # # https://hub.docker.com/r/mrlt8/wyze-bridge/tags
+    # wyze-bridge:
+    #   image: mrlt8/wyze-bridge:2.10.3@sha256:af2d638a6d6d52e15ddcfb711e5b905e484b1f519986ad33b9be562b6277b987
+    #   ports:
+    #     # - 1935:1935 # RTMP
+    #     # - 8554:8554 # RTSP
+    #     # - 8888:8888 # HLS
+    #     # - 8889:8889 # WebRTC
+    #     # - 8189:8189/udp # WebRTC/ICE
+    #     - 5001:5000 # WEB-UI
+    #   volumes:
+    #     - wyze-tokens:/tokens
 
-  # https://github.com/klutchell/balena-tailscale
+    # https://github.com/klutchell/balena-tailscale
   tailscale:
     build: tailscale
     restart: on-failure
@@ -114,6 +114,26 @@ services:
       - /var/run/
     volumes:
       - tailscale:/var/lib/tailscale
+  spotify:
+    image: tmigone/librespot:0.3.1
+    container_name: spotify
+    restart: unless-stopped
+    privileged: true
+    devices:
+      - /dev/snd:/dev/snd
+    environment:
+      - AUDIO_OUTPUT=analog
+    network_mode: host
+    volumes:
+      - spotifycache:/var/cache/raspotify
+    command: >
+      /usr/bin/librespot
+      --name "Home Assistant (Pi4)"
+      --backend alsa
+      --device sysdefault:CARD=Headphones
+      --bitrate 320
+      --initial-volume 75
+      --cache /var/cache/raspotify
 
 volumes:
   config: {}
@@ -123,3 +143,4 @@ volumes:
   tailscale: {}
   # esphome: {}
   matter-server: {}
+  spotifycache: {}
