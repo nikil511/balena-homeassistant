@@ -3,7 +3,7 @@ version: "2.1"
 services:
   # https://hub.docker.com/r/homeassistant/home-assistant
   homeassistant:
-    image: homeassistant/home-assistant:2025.8.2@sha256:cd742b4b3311c7e84a978448860088e734221e9314b73e3931d148d1b081a263
+    build: ./homeassistant
     network_mode: host
     volumes:
       - config:/config
@@ -12,6 +12,26 @@ services:
     environment:
       DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
     privileged: true
+    command: >
+      sh -c '
+        set -e;
+        mkdir -p /config;
+        touch /config/configuration.yaml;
+        if ! grep -q "^http:" /config/configuration.yaml; then
+          echo "Appending http reverse proxy config to /config/configuration.yaml";
+          printf "\n# HTTP Configuration for Reverse Proxy\nhttp:\n  use_x_forwarded_for: true\n  trusted_proxies:\n    - 127.0.0.1\n    - ::1\n" >> /config/configuration.yaml;
+        fi;
+        exec /init'
+
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    network_mode: host
+    depends_on:
+      - homeassistant
+    restart: unless-stopped
 
   # https://hub.docker.com/_/eclipse-mosquitto
   mqtt:

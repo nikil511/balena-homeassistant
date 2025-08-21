@@ -1,0 +1,48 @@
+# Home Assistant configuration
+
+# Manual configuration to override HTTP for reverse proxy
+automation: !include automations.yaml
+blueprint: !include blueprints.yaml
+cloud:
+config:
+conversation:
+counter:
+dhcp:
+discovery:
+energy:
+frontend:
+history:
+image:
+input_boolean:
+input_button:
+input_datetime:
+input_number:
+input_select:
+input_text:
+logbook:
+map:
+media_source:
+mobile_app:
+my:
+person:
+scene: !include scenes.yaml
+script: !include scripts.yaml
+schedule:
+ssdp:
+stream:
+sun:
+system_health:
+tag:
+timer:
+update:
+webhook:
+zeroconf:
+zone:
+
+# HTTP Configuration for Reverse Proxy
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - ::1
+    - 172.17.0.1
