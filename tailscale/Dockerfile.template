@@ -1,12 +1,4 @@
+FROM ghcr.io/tailscale/tailscale:latest
 
-ARG BALENA_ARCH=%%BALENA_ARCH%%
-
-# https://github.com/klutchell/balena-tailscale
-FROM bh.cr/gh_klutchell/tailscale-amd64/047702aa1dc7a98a96df688d6492993a:1.86.2-rev4 AS balena-tailscale-amd64
-FROM bh.cr/gh_klutchell/tailscale-aarch64/a7b3bc427704639bf80be9bd389b9eca:1.86.2-rev4 AS balena-tailscale-aarch64
-
-# hadolint ignore=DL3006
-FROM balena-tailscale-${BALENA_ARCH}
-
-ENV TS_HOSTNAME="homeassistant"
+ENV TS_HOSTNAME="tailscale"
 ENV TS_EXTRA_ARGS="--reset"

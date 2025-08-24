@@ -21,9 +21,9 @@ assets:
     data:
       url: "https://raw.githubusercontent.com/klutchell/balena-homeassistant/main/logo.png"
 data:
-  defaultDeviceType: "raspberrypi4-64"
+  defaultDeviceType: "beaglebone-black"
   supportedDeviceTypes:
-    - "genericx86-64-ext"
+    - "beaglebone-black"
     - "intel-nuc"
     - "raspberrypi3-64"
     - "raspberrypi4-64"
