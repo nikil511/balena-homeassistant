@@ -8,7 +8,7 @@ services:
     labels:
       io.balena.features.supervisor-api: 1
     environment:
-      SET_HOSTNAME: homeassistant
+      SET_HOSTNAME: tailscale
 
   tailscale:
     build: tailscale
@@ -27,4 +27,3 @@ services:
 
 volumes:
   tailscale: {}
-
